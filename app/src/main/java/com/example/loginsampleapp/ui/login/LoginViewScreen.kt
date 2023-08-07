@@ -32,6 +32,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,14 +41,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.loginsampleapp.R
-import com.example.loginsampleapp.ui.component.CustomDialog
 import com.example.loginsampleapp.ui.component.CustomProgressBar
 import com.example.loginsampleapp.ui.component.RoundedTextField
+import com.example.loginsampleapp.ui.component.ShowAlertDialog
+import com.example.loginsampleapp.ui.component.alertDialog.AlertDialogModel
 import com.example.loginsampleapp.ui.component.alertDialog.AlertDialogType
+import com.example.loginsampleapp.ui.component.roundedButton.RoundedButtonModel
+import com.example.loginsampleapp.ui.component.roundedTextField.RoundedTextFieldModel
 import com.example.loginsampleapp.ui.theme.Dimens
 import com.example.loginsampleapp.ui.theme.Dimens.Padding24
 import com.example.loginsampleapp.ui.theme.PrimaryColor
@@ -63,7 +64,7 @@ fun LoginViewScreen(
     updatePassword: (String) -> Unit,
     onDismissDialog: () -> Unit,
     executeLogin: () -> Unit
-){
+) {
     LoginScreenContent(
         loginScreenState = screenState,
         emailState = emailState,
@@ -80,11 +81,11 @@ fun LoginViewScreen(
 fun LoginScreenContent(
     loginScreenState: LoginScreenState,
     emailState: String,
-    passwordState:String,
-    emailChanged:(String)-> Unit,
-    passwordChanged:(String) -> Unit,
+    passwordState: String,
+    emailChanged: (String) -> Unit,
+    passwordChanged: (String) -> Unit,
     actionAlert: () -> Unit,
-    executeLogin:() -> Unit
+    executeLogin: () -> Unit
 
 ) {
     var showPassword by remember { mutableStateOf(false) }
@@ -107,98 +108,101 @@ fun LoginScreenContent(
             )
 
             RoundedTextField(
-                value = emailState,
-                onValueChange = { newText -> emailChanged(newText) },
-                modifier = Modifier
-                    .padding(
-                        start = Dimens.Padding16,
-                        end = Dimens.Padding16
-                    )
-                    .fillMaxWidth(),
-                roundedCorner = Dimens.RoundedCorner24,
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Email,
-                        contentDescription = stringResource(R.string.email),
-                    )
-                },
-                placeHolderText = stringResource(R.string.email),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Done
-                ),
-                visualTransformation = VisualTransformation.None,
-                isError = loginScreenState.isNotValidEmail,
-                supportingText = {
-                    if (loginScreenState.isNotValidEmail) {
-                        Text(
-                            modifier = Modifier.padding(start = Dimens.Padding24),
-                            text = stringResource(id = R.string.email_error),
-                            color = Color.Red,
+                RoundedTextFieldModel(
+                    value = emailState,
+                    onValueChange = { newText -> emailChanged(newText) },
+                    modifier = Modifier
+                        .padding(start = Dimens.Padding16, end = Dimens.Padding16)
+                        .fillMaxWidth(),
+                    roundedCorner = Dimens.RoundedCorner24,
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Email,
+                            contentDescription = stringResource(R.string.email),
                         )
-                    }
-                },
-                focusRequester = focusRequester
+                    },
+                    placeHolderText = stringResource(R.string.email),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Done
+                    ),
+                    visualTransformation = VisualTransformation.None,
+                    isError = loginScreenState.isNotValidEmail,
+                    focusRequester = focusRequester,
+                    focusManager = LocalFocusManager.current,
+                    supportingText = {
+                        if (loginScreenState.isNotValidEmail) {
+                            Text(
+                                modifier = Modifier.padding(start = Padding24),
+                                text = stringResource(id = R.string.email_error),
+                                color = Color.Red,
+                            )
+                        }
+                    },
+                )
             )
 
             Spacer(modifier = Modifier.size(Dimens.Padding34))
 
             RoundedTextField(
-                value = passwordState,
-                onValueChange = { newText -> passwordChanged(newText) },
-                modifier = Modifier
-                    .padding(
-                        start = Dimens.Padding16,
-                        end = Dimens.Padding16
-                    )
-                    .fillMaxWidth(),
-                roundedCorner = Dimens.RoundedCorner24,
-                trailingIcon = {
-                    IconButton(onClick = { showPassword = !showPassword }) {
-                        Icon(
-                            imageVector = if (showPassword) {
-                                Icons.Outlined.Face
-                            } else {
-                                Icons.Outlined.Lock
-                            },
-                            contentDescription = stringResource(R.string.password)
-                        )
+                RoundedTextFieldModel(
+                    value = passwordState,
+                    onValueChange = { newText -> passwordChanged(newText) },
+                    modifier = Modifier
+                        .padding(start = Dimens.Padding16, end = Dimens.Padding16)
+                        .fillMaxWidth(),
+                    roundedCorner = Dimens.RoundedCorner24,
+                    trailingIcon = {
+                        IconButton(onClick = { showPassword = !showPassword }) {
+                            Icon(
+                                imageVector = if (showPassword) {
+                                    Icons.Outlined.Face
+                                } else {
+                                    Icons.Outlined.Lock
+                                },
+                                contentDescription = stringResource(R.string.password)
+                            )
+                        }
+                    },
+                    placeHolderText = stringResource(R.string.password),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
+                    ),
+                    visualTransformation = if (showPassword) {
+                        VisualTransformation.None
+                    } else {
+                        PasswordVisualTransformation()
+                    },
+                    isError = loginScreenState.isNotValidPassword,
+                    focusRequester = focusRequester,
+                    focusManager = LocalFocusManager.current,
+                    supportingText = {
+                        if (loginScreenState.isNotValidPassword) {
+                            Text(
+                                modifier = Modifier.padding(start = Padding24),
+                                text = stringResource(id = R.string.password_error),
+                                color = Color.Red,
+                            )
+                        }
                     }
-                },
-                placeHolderText = stringResource(R.string.password),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done
-                ),
-                visualTransformation = if (showPassword) {
-                    VisualTransformation.None
-                } else {
-                    PasswordVisualTransformation()
-                },
-                isError = loginScreenState.isNotValidPassword,
-                supportingText = {
-                    if (loginScreenState.isNotValidPassword) {
-                        Text(
-                            modifier = Modifier.padding(start = Padding24),
-                            text = stringResource(id = R.string.password_error),
-                            color = Color.Red,
-                        )
-                    }
-                }
+                )
             )
 
             Spacer(modifier = Modifier.size(Dimens.Padding30))
 
             RoundedButton(
-                onClick = { executeLogin.invoke() },
-                text = stringResource(id = R.string.sign_in),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Dimens.Padding16),
-                roundedCorner = Dimens.RoundedCorner24,
-                textSize = FontSize20,
-                backgroundColor = MaterialTheme.colors.secondary,
-                contentColor = Color.Black
+                RoundedButtonModel(
+                    onClick = { executeLogin.invoke() },
+                    text = stringResource(id = R.string.sign_in),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(Dimens.Padding16),
+                    roundedCorner = Dimens.RoundedCorner24,
+                    textSize = FontSize20,
+                    backgroundColor = MaterialTheme.colors.secondary,
+                    contentColor = Color.Black
+                )
             )
 
             Row(
@@ -224,10 +228,27 @@ fun LoginScreenContent(
                     fontWeight = FontWeight.Bold,
                 )
             }
-            if (loginScreenState.showAlertDialog) {
-                //ShowAlertDialog(action = actionAlert)
+            if (loginScreenState.dialogType != AlertDialogType.NONE) {
+                ShowAlertDialog(
+                    AlertDialogModel(
+                        dialogType = loginScreenState.dialogType,
+                        title = stringResource(
+                            id = if (loginScreenState.dialogType == AlertDialogType.SUCCESS)
+                                R.string.Welcome
+                            else
+                                R.string.Error
+                        ),
+                        body = loginScreenState.messageDialog,
+                        textButton = stringResource(id = R.string.accept),
+                        actionButton = actionAlert,
+                        backgroundColorButton = MaterialTheme.colors.primary,
+                        contentColorButton = Color.White
+                    )
+                )
             }
         }
-        if (loginScreenState.isLoading) CustomProgressBar()
+        if (loginScreenState.isLoading) {
+            CustomProgressBar()
+        }
     }
 }

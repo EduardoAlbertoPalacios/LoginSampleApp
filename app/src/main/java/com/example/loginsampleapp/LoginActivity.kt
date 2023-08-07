@@ -7,16 +7,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.loginsampleapp.ui.login.LoginScreenState
 import com.example.loginsampleapp.ui.login.LoginViewModel
 import com.example.loginsampleapp.ui.login.LoginViewScreen
 import com.example.loginsampleapp.ui.theme.LoginSampleAppTheme
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.compose.koinViewModel
 
-@AndroidEntryPoint
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +26,9 @@ class LoginActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val viewModel = hiltViewModel<LoginViewModel>()
+                    val viewModel = koinViewModel<LoginViewModel>()
                     viewModel.apply {
+                        val state by state.collectAsStateWithLifecycle()
                         LoginViewScreen(
                             screenState = state,
                             emailState = email,

@@ -1,6 +1,7 @@
 package com.example.loginsampleapp.ui.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -16,7 +17,7 @@ import com.example.loginsampleapp.R
 import com.example.loginsampleapp.ui.theme.grayTransparency
 
 @Composable
-fun CustomProgressBar(){
+fun CustomProgressBar() {
     val composition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(R.raw.loader_animation)
     )
@@ -31,6 +32,7 @@ fun CustomProgressBar(){
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .clickable { Unit }
             .background(grayTransparency),
         contentAlignment = Alignment.Center,
     ) {

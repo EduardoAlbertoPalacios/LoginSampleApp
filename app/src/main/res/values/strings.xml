@@ -9,5 +9,6 @@
     <string name="password_error">Password is not valid</string>
     <string name="accept">Accept</string>
     <string name="icon">Icon</string>
-
+    <string name="Welcome">Welcome</string>
+    <string name="Error">Error</string>
 </resources>

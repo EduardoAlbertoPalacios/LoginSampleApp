@@ -5,24 +5,60 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.baubap.domain.entities.AuthEntity
+import com.baubap.domain.usecase.Params
+import com.baubap.domain.usecase.UseCase
+import com.baubap.shared.common.ProcessResult
+import com.example.loginsampleapp.ui.component.alertDialog.AlertDialogModel
+import com.example.loginsampleapp.ui.component.alertDialog.AlertDialogType
+import com.example.loginsampleapp.ui.login.mapper.toSuccessMessageLoginMapper
 import com.example.loginsampleapp.utils.isNotValidEmail
-import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
+class LoginViewModel(private val useCase: UseCase<Params, ProcessResult<AuthEntity>>) : ViewModel() {
     var email by mutableStateOf("")
         private set
     var password by mutableStateOf("")
         private set
-    var state by mutableStateOf(LoginScreenState())
+
+    var _state = MutableStateFlow(LoginScreenState())
+    var state = _state.asStateFlow()
 
     fun executeLogin() {
         viewModelScope.launch {
-            verifyInputs {
-
-            }
+            verifyInputs(
+                request = {
+                    useCase.execute(Params(email, password)).onStart {
+                        updateState(
+                            isLoading = true,
+                            isNotValidEmail = false,
+                            isNotValidPassword = false,
+                        )
+                    }.collect { result ->
+                        when (result) {
+                            is ProcessResult.Success -> {
+                                updateState(
+                                    isLoading = false,
+                                    dialogType = AlertDialogType.SUCCESS,
+                                    messageDialog = result.data.toSuccessMessageLoginMapper()
+                                )
+                            }
+                            is ProcessResult.Error -> {
+                                result.exception.message?.let { error ->
+                                    updateState(
+                                        isLoading = false,
+                                        dialogType = AlertDialogType.ERROR,
+                                        messageDialog = error
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            )
         }
     }
 
@@ -35,10 +71,10 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     }
 
     fun onDismissDialog() {
-        updateState(showAlertDialog = false)
+        updateState(dialogType = AlertDialogType.NONE)
     }
 
-    private fun verifyInputs(executeLogin: () -> Unit) {
+    private suspend fun verifyInputs(request: suspend () -> Unit) {
         when {
             email.isNotValidEmail() && password.isBlank() ->
                 updateState(
@@ -58,14 +94,7 @@ class LoginViewModel @Inject constructor() : ViewModel() {
                     isNotValidPassword = true,
                 )
 
-            else -> {
-                updateState(
-                    isLoading = true,
-                    isNotValidEmail = false,
-                    isNotValidPassword = false,
-                )
-                executeLogin.invoke()
-            }
+            else -> request.invoke()
         }
     }
 
@@ -73,26 +102,15 @@ class LoginViewModel @Inject constructor() : ViewModel() {
         isLoading: Boolean = false,
         isNotValidEmail: Boolean = false,
         isNotValidPassword: Boolean = false,
-        showAlertDialog: Boolean = false,
-        success: String? = null,
-        error: String? = null
+        dialogType: AlertDialogType = AlertDialogType.NONE,
+        messageDialog: String = "",
     ) {
-        state = state.copy(
+       _state.value = state.value.copy(
             isLoading = isLoading,
             isNotValidEmail = isNotValidEmail,
             isNotValidPassword = isNotValidPassword,
-            showAlertDialog = showAlertDialog,
-            success = success,
-            error = error
+            dialogType = dialogType,
+            messageDialog = messageDialog,
         )
     }
 }
-
-data class LoginScreenState(
-    val isLoading: Boolean = false,
-    val isNotValidEmail: Boolean = false,
-    val isNotValidPassword: Boolean = false,
-    val showAlertDialog: Boolean = false,
-    val success: String? = null,
-    val error: String? = null,
-)

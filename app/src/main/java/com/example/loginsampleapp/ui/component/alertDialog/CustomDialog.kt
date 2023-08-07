@@ -20,7 +20,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.window.Dialog
 import com.example.loginsampleapp.R
+import com.example.loginsampleapp.ui.component.alertDialog.AlertDialogModel
 import com.example.loginsampleapp.ui.component.alertDialog.AlertDialogType
+import com.example.loginsampleapp.ui.component.roundedButton.RoundedButtonModel
 import com.example.loginsampleapp.ui.theme.Dimens
 import com.example.loginsampleapp.ui.theme.Dimens.Elevation5
 import com.example.loginsampleapp.ui.theme.Dimens.RoundedCorner12
@@ -28,22 +30,21 @@ import com.example.loginsampleapp.ui.theme.TextSize.FontSize16
 import com.example.loginsampleapp.ui.theme.TextSize.FontSize30
 
 @Composable
-fun ShowAlertDialog(
-    dialogType: AlertDialogType,
-    title: String,
-    body: String,
-    action: () -> Unit
-) {
-    Dialog(
-        onDismissRequest = { action() }
-    ) {
-        CustomDialog(
-            dialogType = dialogType,
-            title = title,
-            body = body,
-            buttonText = stringResource(R.string.accept),
-            actionButton = { action() },
-        )
+fun ShowAlertDialog(alertDialogModel: AlertDialogModel) {
+    alertDialogModel.apply {
+        Dialog(
+            onDismissRequest = { actionButton() }
+        ) {
+            CustomDialog(
+                dialogType = dialogType,
+                title = title,
+                body = body,
+                textButton = textButton,
+                backgroundColorButton = backgroundColorButton,
+                contentColorButton = contentColorButton,
+                actionButton = { actionButton() },
+            )
+        }
     }
 }
 
@@ -52,7 +53,9 @@ fun CustomDialog(
     dialogType: AlertDialogType,
     title: String,
     body: String,
-    buttonText: String,
+    textButton: String,
+    backgroundColorButton: Color,
+    contentColorButton: Color,
     actionButton: () -> Unit
 ) {
     Card(
@@ -97,11 +100,15 @@ fun CustomDialog(
                 Spacer(modifier = Modifier.size(Dimens.Padding28))
 
                 RoundedButton(
-                    onClick = actionButton,
-                    text = buttonText,
-                    modifier = Modifier.fillMaxWidth(),
-                    roundedCorner = Dimens.RoundedCorner24,
-                    textSize = FontSize16,
+                    RoundedButtonModel(
+                        onClick = actionButton,
+                        text = textButton,
+                        modifier = Modifier.fillMaxWidth(),
+                        roundedCorner = Dimens.RoundedCorner24,
+                        textSize = FontSize16,
+                        backgroundColor = backgroundColorButton,
+                        contentColor = contentColorButton
+                    )
                 )
             }
         }
