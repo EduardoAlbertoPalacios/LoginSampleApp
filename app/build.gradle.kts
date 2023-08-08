@@ -63,6 +63,10 @@ dependencies {
     implementation("androidx.compose.ui:ui:${Versions.composeUi}")
     implementation("androidx.compose.ui:ui-tooling-preview:${Versions.composeUi}")
     implementation("androidx.compose.material:material:${Versions.composeMaterial}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}")
+    testImplementation("io.mockk:mockk:${Versions.mockk}")
+    testImplementation("org.mockito:mockito-inline:${Versions.mockitoInline}")
     implementation("com.google.accompanist:accompanist-systemuicontroller:${Versions.systemUiController}")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:${Versions.composeRuntime}")
 
@@ -78,6 +82,7 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:${Versions.composeLottie}")
 
     testImplementation("junit:junit:${Versions.jUnit}")
+    testImplementation(project(mapOf("path" to ":shared")))
     androidTestImplementation("androidx.test.ext:junit:${Versions.jUnitTest}")
     androidTestImplementation("androidx.test.espresso:espresso-core:${Versions.espressoCore}")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:${Versions.composeUi}")

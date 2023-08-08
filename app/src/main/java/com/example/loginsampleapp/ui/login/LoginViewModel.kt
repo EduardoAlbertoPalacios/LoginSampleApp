@@ -1,5 +1,6 @@
 package com.example.loginsampleapp.ui.login
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,20 +10,20 @@ import com.baubap.domain.entities.AuthEntity
 import com.baubap.domain.usecase.Params
 import com.baubap.domain.usecase.UseCase
 import com.baubap.shared.common.ProcessResult
-import com.example.loginsampleapp.ui.component.alertDialog.AlertDialogModel
 import com.example.loginsampleapp.ui.component.alertDialog.AlertDialogType
-import com.example.loginsampleapp.ui.login.mapper.toSuccessMessageLoginMapper
+import com.example.loginsampleapp.ui.login.mapper.mapToSuccessMessageLogin
 import com.example.loginsampleapp.utils.isNotValidEmail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val useCase: UseCase<Params, ProcessResult<AuthEntity>>) : ViewModel() {
+class LoginViewModel(private val useCase: UseCase<Params, ProcessResult<AuthEntity>>) :
+    ViewModel() {
+
     var email by mutableStateOf("")
-        private set
     var password by mutableStateOf("")
-        private set
 
     var _state = MutableStateFlow(LoginScreenState())
     var state = _state.asStateFlow()
@@ -43,7 +44,7 @@ class LoginViewModel(private val useCase: UseCase<Params, ProcessResult<AuthEnti
                                 updateState(
                                     isLoading = false,
                                     dialogType = AlertDialogType.SUCCESS,
-                                    messageDialog = result.data.toSuccessMessageLoginMapper()
+                                    messageDialog = result.data.mapToSuccessMessageLogin()
                                 )
                             }
                             is ProcessResult.Error -> {
@@ -104,8 +105,8 @@ class LoginViewModel(private val useCase: UseCase<Params, ProcessResult<AuthEnti
         isNotValidPassword: Boolean = false,
         dialogType: AlertDialogType = AlertDialogType.NONE,
         messageDialog: String = "",
-    ) {
-       _state.value = state.value.copy(
+    ) = _state.update {
+        it.copy(
             isLoading = isLoading,
             isNotValidEmail = isNotValidEmail,
             isNotValidPassword = isNotValidPassword,
