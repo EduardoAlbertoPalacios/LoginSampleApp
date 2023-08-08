@@ -10,6 +10,7 @@ import com.example.loginsampleapp.ui.component.alertDialog.AlertDialogType
 import com.example.loginsampleapp.ui.login.LoginViewModel
 import com.example.loginsampleapp.utils.rules.CoroutinesTestRule
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -97,6 +98,10 @@ class LoginViewModelTest {
             assert(!it._state.value.isLoading)
             assert(it._state.value.dialogType == AlertDialogType.SUCCESS)
         }
+
+        coVerify {
+            useCase.execute(params())
+        }
     }
 
     @Test
@@ -117,6 +122,10 @@ class LoginViewModelTest {
             assert(!it._state.value.isLoading)
             assert(it._state.value.dialogType == AlertDialogType.ERROR)
             assert(it._state.value.messageDialog == FAKE_ERROR)
+        }
+
+        coVerify {
+            useCase.execute(params())
         }
     }
 
