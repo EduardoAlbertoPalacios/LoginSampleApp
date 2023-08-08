@@ -3,7 +3,7 @@ package com.baubap.data.repository
 import com.baubap.data.datasource.AuthDataSource
 import com.baubap.data.rest.model.request.AuthRequest
 import com.baubap.domain.entities.AuthEntity
-import com.baubap.domain.mapper.toDomainMapper
+import com.baubap.domain.mapper.mapToEntity
 import com.baubap.domain.repository.AuthRepository
 import com.baubap.domain.usecase.Params
 import com.baubap.shared.exceptions.ApplicationException
@@ -17,7 +17,7 @@ class AuthDataRepository(private val dataSource: AuthDataSource) : AuthRepositor
             AuthRequest(email, password)
         }
         return dataSource.executeLogin(request).map {
-            it.toDomainMapper()
+            it.mapToEntity()
         }.onError()
     }
 
