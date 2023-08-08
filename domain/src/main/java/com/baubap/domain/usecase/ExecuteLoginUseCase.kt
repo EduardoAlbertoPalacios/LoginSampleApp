@@ -17,5 +17,3 @@ class ExecuteLoginUseCase(private val repository: AuthRepository) :
         }
     }
 }
-
-data class Params(val email: String, val password: String)
