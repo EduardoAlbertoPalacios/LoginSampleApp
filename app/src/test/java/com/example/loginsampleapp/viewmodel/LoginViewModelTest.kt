@@ -20,11 +20,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
-@RunWith(MockitoJUnitRunner.StrictStubs::class)
 class LoginViewModelTest {
     @get:Rule
     val rule = CoroutinesTestRule()

@@ -22,7 +22,6 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(private val useCase: UseCase<Params, ProcessResult<AuthEntity>>) :
     ViewModel() {
-
     var email by mutableStateOf("")
     var password by mutableStateOf("")
     var showPassword  by mutableStateOf(false)

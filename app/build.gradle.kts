@@ -66,7 +66,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}")
     testImplementation("io.mockk:mockk:${Versions.mockk}")
-    testImplementation("org.mockito:mockito-inline:${Versions.mockitoInline}")
     implementation("com.google.accompanist:accompanist-systemuicontroller:${Versions.systemUiController}")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:${Versions.composeRuntime}")
     androidTestImplementation(platform("androidx.compose:compose-bom:2022.12.00"))

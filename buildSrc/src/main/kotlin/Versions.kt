@@ -8,8 +8,6 @@ object Versions {
     const val androidMaterial = "1.9.0"
     const val jUnit = "4.13.2"
     const val jUnitTest = "1.1.5"
-    const val mockitoInline = "3.10.0"
-    const val mockitoKotlin = "4.1.0"
     const val mockk = "1.13.3"
     const val espressoCore = "3.5.1"
     const val kotlinCompilerExtensionVersion = "1.4.3"
