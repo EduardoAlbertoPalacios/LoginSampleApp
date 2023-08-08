@@ -3,6 +3,7 @@ package com.example.loginsampleapp.ui.login
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,6 +25,7 @@ class LoginViewModel(private val useCase: UseCase<Params, ProcessResult<AuthEnti
 
     var email by mutableStateOf("")
     var password by mutableStateOf("")
+    var showPassword  by mutableStateOf(false)
 
     var _state = MutableStateFlow(LoginScreenState())
     var state = _state.asStateFlow()
@@ -61,6 +63,10 @@ class LoginViewModel(private val useCase: UseCase<Params, ProcessResult<AuthEnti
                 }
             )
         }
+    }
+
+    fun updateShowPassword(isVisible: Boolean) {
+        showPassword = isVisible
     }
 
     fun updateEmail(input: String) {

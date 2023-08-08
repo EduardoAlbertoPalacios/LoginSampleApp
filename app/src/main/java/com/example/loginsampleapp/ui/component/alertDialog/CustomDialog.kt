@@ -73,7 +73,12 @@ fun CustomDialog(
                         R.drawable.ic_action_error
 
                 ),
-                contentDescription = stringResource(id = R.string.icon),
+                contentDescription = stringResource(
+                    id = if (dialogType == AlertDialogType.SUCCESS)
+                        R.string.success_dialog
+                    else
+                        R.string.error_dialog
+                ),
                 tint = if (dialogType == AlertDialogType.SUCCESS)
                     Color.Green
                 else

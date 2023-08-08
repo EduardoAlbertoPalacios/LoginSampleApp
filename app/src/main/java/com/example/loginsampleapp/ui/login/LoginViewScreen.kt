@@ -62,6 +62,8 @@ fun LoginViewScreen(
     passwordState: String,
     updateEmail: (String) -> Unit,
     updatePassword: (String) -> Unit,
+    showPassword: Boolean,
+    updateShowPassword: (Boolean) -> Unit,
     onDismissDialog: () -> Unit,
     executeLogin: () -> Unit
 ) {
@@ -71,6 +73,8 @@ fun LoginViewScreen(
         passwordState = passwordState,
         emailChanged = updateEmail,
         passwordChanged = updatePassword,
+        showPassword = showPassword,
+        updateShowPassword = updateShowPassword,
         actionAlert = onDismissDialog,
         executeLogin = executeLogin
     )
@@ -84,12 +88,12 @@ fun LoginScreenContent(
     passwordState: String,
     emailChanged: (String) -> Unit,
     passwordChanged: (String) -> Unit,
+    showPassword: Boolean,
+    updateShowPassword: (Boolean) -> Unit,
     actionAlert: () -> Unit,
     executeLogin: () -> Unit
 
 ) {
-    var showPassword by remember { mutableStateOf(false) }
-
     val (focusRequester) = FocusRequester.createRefs()
 
     Box {
@@ -101,7 +105,7 @@ fun LoginScreenContent(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo),
-                contentDescription = null,
+                contentDescription = stringResource(id = R.string.image_logo_login),
                 Modifier
                     .padding(Dimens.Padding10)
                     .size(Dimens.Size200)
@@ -153,7 +157,7 @@ fun LoginScreenContent(
                         .fillMaxWidth(),
                     roundedCorner = Dimens.RoundedCorner24,
                     trailingIcon = {
-                        IconButton(onClick = { showPassword = !showPassword }) {
+                        IconButton(onClick = { updateShowPassword.invoke(!showPassword) }) {
                             Icon(
                                 imageVector = if (showPassword) {
                                     Icons.Outlined.Face
@@ -248,7 +252,9 @@ fun LoginScreenContent(
             }
         }
         if (loginScreenState.isLoading) {
-            CustomProgressBar()
+            CustomProgressBar(
+                typeComposition = loginScreenState.progressBarLogoType
+            )
         }
     }
 }

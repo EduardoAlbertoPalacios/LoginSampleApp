@@ -35,6 +35,8 @@ class LoginActivity : ComponentActivity() {
                             passwordState = password,
                             updateEmail = ::updateEmail,
                             updatePassword = ::updatePassword,
+                            showPassword = showPassword,
+                            updateShowPassword = ::updateShowPassword,
                             onDismissDialog = ::onDismissDialog,
                             executeLogin = ::executeLogin
                         )
@@ -56,6 +58,8 @@ fun DefaultPreview() {
             passwordState = "",
             updateEmail = {},
             updatePassword = {},
+            showPassword = false,
+            updateShowPassword = {},
             onDismissDialog = {},
             executeLogin = {}
         )

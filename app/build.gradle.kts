@@ -69,6 +69,9 @@ dependencies {
     testImplementation("org.mockito:mockito-inline:${Versions.mockitoInline}")
     implementation("com.google.accompanist:accompanist-systemuicontroller:${Versions.systemUiController}")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:${Versions.composeRuntime}")
+    androidTestImplementation(platform("androidx.compose:compose-bom:2022.12.00"))
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.0.0-beta05")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 
     //Network
     implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
