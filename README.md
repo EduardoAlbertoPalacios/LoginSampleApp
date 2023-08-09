@@ -37,6 +37,12 @@ LoginScreen, AlertDialog and another components were tested.
 These tests focus on testing the individual components and their behavior in isolation.
 This project includes unit tests.
 
+## Login Application 
+| Happy Path    |  Unhappy Path |
+| ------------- | ------------- |
+| <video src=https://github.com/EduardoAlbertoPalacios/LoginSampleApp/assets/36978350/8d561c96-bfc2-480f-8621-357bba3d8eaf > |  <video src =https://github.com/EduardoAlbertoPalacios/LoginSampleApp/assets/36978350/d4943474-2544-449c-a06c-d5c218a71711>  |
+
+
 
 
 
