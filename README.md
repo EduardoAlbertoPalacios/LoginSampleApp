@@ -18,7 +18,7 @@ They take input and transform it into output in a way specific to the app.
 
 ## Data
 
-Provides the data that will be exposed in UI Layer after mapping it from the domain layer.
+Provides the data that will be exposed in the UI Layer after mapping it from the domain layer.
 The entry points to the data layer are always the repository and Data source.
 The repository acts as a bridge between the domain layer and Data source encapsulate the network client or a instance db local.
 
