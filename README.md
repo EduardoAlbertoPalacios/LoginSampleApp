@@ -1,6 +1,9 @@
-# Android Login sample
+# Summary
 
-Android application to login user, verifying the user credentials (email and password) in a fake environment web service.
+Android application to login user, verifying the user credentials (email and password) in a fake environment web service.If the user authenticates successfully, an alert will be displayed with a success message.
+
+# Language
+The entire project is designed with kotlin language.
 
 ## Project structure
 The project implement the clean architecture guidelines as follows:
@@ -22,17 +25,14 @@ Provides the data that will be exposed in the UI Layer after mapping it from the
 The entry points to the data layer are always the repository and Data source.
 The repository acts as a bridge between the domain layer and Data source encapsulate the network client or a instance db local.
 
-# Language
-The entire project is designed with kotlin language.
-
 # Testing
 
-**Android test directory**
+**Android testing**
 
 Instrumentation test are defined for the UI, simulating user interactions and validate the behavior of the user interface.
 LoginScreen, AlertDialog and another components were tested.
 
-**Test directory** 
+**Unit testing** 
 
 These tests focus on testing the individual components and their behavior in isolation.
 This project includes unit tests.
