@@ -11,6 +11,11 @@ import okhttp3.Protocol
 import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 
+/**
+ * Intercept the authentication response for mocking it.
+ *
+ * @param context Represent the entire application context to define a fake authentication response.
+ */
 class AuthInterceptor(private val context: Context) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()

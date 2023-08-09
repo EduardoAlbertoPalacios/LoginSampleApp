@@ -8,6 +8,11 @@ import com.baubap.shared.exceptions.ApplicationException
 import okhttp3.Interceptor
 import okhttp3.Response
 
+/**
+ * Verifies the network connection, before starting the login operation.
+ *
+ * @param context Represent the entire application context
+ */
 class CheckNetworkInterceptor(private val context: Context) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         if (context.isNotConnected()) {

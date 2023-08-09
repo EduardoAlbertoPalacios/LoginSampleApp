@@ -5,6 +5,11 @@ import com.baubap.data.rest.interceptors.InterceptorConstants.INVALID_CREDENTIAL
 import com.baubap.shared.exceptions.ApplicationException
 import okhttp3.HttpUrl
 
+/**
+ * Creates a fake authentication response using a local file Json.
+ *
+ * @param context Represent the entire application context to define a fake authentication response.
+ */
 class FakeAuthResponse(private val context: Context) {
     fun getResponse(httpUrl: HttpUrl): String =
         if (httpUrl.queryParameter(EMAIL) == EMAIL_CREDENTIAL

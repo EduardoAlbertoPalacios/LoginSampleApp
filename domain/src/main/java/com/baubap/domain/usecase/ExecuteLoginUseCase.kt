@@ -7,6 +7,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
+/**
+ * Use case for performing login.
+ *
+ * @param repository The repository for authentication-related operations.
+ */
 class ExecuteLoginUseCase(private val repository: AuthRepository) :
     UseCase<Params, ProcessResult<AuthEntity>>() {
     override suspend fun buildUseCase(params: Params): Flow<ProcessResult<AuthEntity>> = flow {
